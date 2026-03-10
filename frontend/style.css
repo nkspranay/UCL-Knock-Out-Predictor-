@@ -1,0 +1,525 @@
+:root {
+    --bg-dark: #000a16;
+    --bg-panel: rgba(2, 11, 31, 0.4);
+    --neon-blue: #00f2fe;
+    --accent-blue: #4facfe;
+    --glass-border: rgba(0, 242, 254, 0.15);
+    --text-main: #ffffff;
+    --text-muted: #8892b0;
+    --sidebar-width: 300px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Outfit', sans-serif;
+}
+
+body {
+    background-color: var(--bg-dark);
+    /* Adding a radial gradient overlay on top of the stadium image to make it look premium */
+    background: radial-gradient(circle at top right, rgba(0, 242, 254, 0.1) 0%, transparent 40%),
+        radial-gradient(circle at bottom left, rgba(0, 4, 30, 0.95) 0%, transparent 60%),
+        url('assets/stadium_bg.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: var(--text-main);
+    min-height: 100vh;
+    overflow: hidden;
+    /* Hide main body scroll, handle scroll in content area */
+}
+
+.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+}
+
+/* ------------------ INTRO ------------------ */
+#intro {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, #021b3f 0%, #000a16 100%);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 1.5s ease-in-out, visibility 1.5s ease-in-out;
+}
+
+.intro-content {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ucl-main-logo {
+    width: 250px;
+    height: auto;
+    margin-bottom: 2rem;
+    filter: drop-shadow(0 0 30px rgba(0, 242, 254, 0.5));
+    animation: float 4s ease-in-out infinite, pulseGlow 3s infinite alternate;
+}
+
+.intro-title {
+    font-size: 2rem;
+    font-weight: 300;
+    letter-spacing: 12px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 3rem;
+}
+
+.loader {
+    width: 250px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.loader::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 30%;
+    background: var(--neon-blue);
+    animation: loading 2s ease-in-out infinite;
+    box-shadow: 0 0 10px var(--neon-blue);
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-15px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+@keyframes pulseGlow {
+    from {
+        filter: drop-shadow(0 0 15px rgba(0, 242, 254, 0.3));
+    }
+
+    to {
+        filter: drop-shadow(0 0 40px rgba(0, 242, 254, 0.8));
+    }
+}
+
+@keyframes loading {
+    0% {
+        left: -30%;
+    }
+
+    50% {
+        left: 100%;
+    }
+
+    100% {
+        left: -30%;
+    }
+}
+
+/* ------------------ DASHBOARD LAYOUT ------------------ */
+#dashboard {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 1s ease-in-out;
+    display: flex;
+    height: 100vh;
+}
+
+/* ------------------ SIDEBAR ------------------ */
+.sidebar {
+    width: var(--sidebar-width);
+    background: rgba(0, 6, 20, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-right: 1px solid var(--glass-border);
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 0;
+    z-index: 100;
+    box-shadow: 5px 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.sidebar-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 2rem;
+    margin-bottom: 2rem;
+}
+
+.sidebar-logo {
+    width: 120px;
+    filter: drop-shadow(0 0 10px rgba(0, 242, 254, 0.3));
+}
+
+.sidebar-header h2 {
+    font-size: 1.1rem;
+    font-weight: 300;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 0 1.5rem;
+}
+
+.nav-links li {
+    margin-bottom: 0.5rem;
+}
+
+.nav-btn {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    text-align: left;
+    padding: 1rem 1.5rem;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+}
+
+.nav-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+}
+
+.nav-btn.active {
+    background: rgba(0, 242, 254, 0.1);
+    color: var(--neon-blue);
+    border-left: 3px solid var(--neon-blue);
+    font-weight: 600;
+}
+
+/* ------------------ MAIN CONTENT AREA ------------------ */
+.content-area {
+    flex: 1;
+    position: relative;
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+.content-section {
+    display: none;
+    height: 100%;
+    animation: fadeInSlideUp 0.6s ease forwards;
+}
+
+.content-section.active {
+    display: block;
+}
+
+@keyframes fadeInSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ------------------ PANELS & GLASSMORPHISM ------------------ */
+.panel {
+    background: var(--bg-panel);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(255, 255, 255, 0.02);
+}
+
+.full-height {
+    min-height: calc(100vh - 4rem);
+    display: flex;
+    flex-direction: column;
+}
+
+.section-header {
+    margin-bottom: 2.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.section-header h3 {
+    font-size: 1.8rem;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 600;
+}
+
+.subtitle {
+    color: var(--accent-blue);
+    font-size: 1rem;
+    margin-top: 5px;
+    font-weight: 300;
+}
+
+/* ------------------ CHARTS ------------------ */
+.chart-container {
+    position: relative;
+    width: 100%;
+    flex: 1;
+}
+
+.large-chart {
+    min-height: 500px;
+}
+
+.chart-wrapper-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+}
+
+.pie-chart {
+    max-width: 600px;
+    max-height: 600px;
+}
+
+/* ------------------ TABLE ------------------ */
+.table-container {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 242, 254, 0.3);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--neon-blue);
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    /* Space between rows */
+}
+
+th,
+td {
+    padding: 15px 20px;
+    text-align: left;
+}
+
+th {
+    color: var(--text-muted);
+    font-weight: 400;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+tbody tr {
+    background: rgba(255, 255, 255, 0.02);
+    transition: transform 0.2s, background 0.2s;
+}
+
+tbody tr:hover {
+    background: rgba(0, 242, 254, 0.08);
+    transform: translateX(5px);
+}
+
+td {
+    font-size: 1.1rem;
+    color: #e2e8f0;
+}
+
+td:first-child {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-weight: 600;
+    color: #fff;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+td:last-child {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.club-logo-small {
+    width: 35px;
+    height: 35px;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+/* ------------------ BRACKET GRID ------------------ */
+.bracket-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+    padding: 1rem 0;
+    flex: 1;
+    align-content: start;
+}
+
+.matchup-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+    border: 1px solid rgba(0, 242, 254, 0.2);
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.matchup-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 242, 254, 0.15);
+    border-color: rgba(0, 242, 254, 0.5);
+}
+
+.matchup-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.matchup-card:hover::before {
+    opacity: 1;
+}
+
+.team-row {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    gap: 15px;
+}
+
+.team-row:first-child {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.club-logo-med {
+    width: 45px;
+    height: 45px;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.6));
+}
+
+.team-name {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+.vs-badge {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    background: rgba(0, 242, 254, 0.1);
+    color: var(--neon-blue);
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    border: 1px solid rgba(0, 242, 254, 0.3);
+}
+
+.empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 5rem;
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+
+/* ------------------ BUTTONS ------------------ */
+.sidebar-footer {
+    margin-top: auto;
+    padding: 2rem 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glow-btn {
+    background: transparent;
+    color: var(--neon-blue);
+    border: 1px solid var(--neon-blue);
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 15px rgba(0, 242, 254, 0.1);
+    width: 100%;
+}
+
+.glow-btn:hover {
+    background: var(--neon-blue);
+    color: var(--bg-dark);
+    box-shadow: 0 0 30px rgba(0, 242, 254, 0.4);
+}
+
+.glow-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: transparent;
+    color: var(--text-muted);
+    border-color: var(--text-muted);
+    box-shadow: none;
+}

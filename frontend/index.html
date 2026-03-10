@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UCL Predictor 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <!-- Intro Animation Screen -->
+    <div id="intro">
+        <div class="intro-content">
+            <img src="assets/ucl-logo.png" alt="UEFA Champions League" class="ucl-main-logo">
+            <h1 class="intro-title">PREDICTOR 2026</h1>
+            <div class="loader"></div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div id="dashboard" class="hidden">
+
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <img src="assets/ucl-logo.png" alt="UCL Logo" class="sidebar-logo">
+                <h2>Predictor Engine</h2>
+            </div>
+
+            <ul class="nav-links">
+                <li><button class="nav-btn active" data-target="team-win-section">Team Probabilities</button></li>
+                <li><button class="nav-btn" data-target="league-win-section">League Probabilities</button></li>
+                <li><button class="nav-btn" data-target="round-results-section">Round Results</button></li>
+                <li><button class="nav-btn" data-target="bracket-section">Tournament Bracket</button></li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <button id="simulate-btn" class="glow-btn huge-btn">Simulate Now</button>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="content-area">
+
+            <!-- SECTION: Team Probabilities -->
+            <section id="team-win-section" class="content-section active">
+                <div class="panel glass full-height">
+                    <div class="section-header">
+                        <h3>Team Win Probabilities</h3>
+                        <p class="subtitle">Likelihood of each club lifting the trophy</p>
+                    </div>
+                    <div class="chart-container large-chart">
+                        <canvas id="teamChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION: League Probabilities -->
+            <section id="league-win-section" class="content-section">
+                <div class="panel glass full-height">
+                    <div class="section-header">
+                        <h3>League Win Probabilities</h3>
+                        <p class="subtitle">Distribution of champions by domestic league</p>
+                    </div>
+                    <div class="chart-wrapper-center">
+                        <div class="chart-container pie-chart">
+                            <canvas id="leagueChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION: Round Results -->
+            <section id="round-results-section" class="content-section">
+                <div class="panel glass full-height">
+                    <div class="section-header">
+                        <h3>Round Progression</h3>
+                        <p class="subtitle">Statistical chances of reaching each stage</p>
+                    </div>
+                    <div class="table-container">
+                        <table id="roundTable">
+                            <thead>
+                                <tr>
+                                    <th>Club</th>
+                                    <th>Quarter Finals</th>
+                                    <th>Semi Finals</th>
+                                    <th>Final</th>
+                                    <th>Win Champion</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Data injected here -->
+                                <tr>
+                                    <td colspan="5" style="text-align: center; color: #8892b0; padding: 3rem;">Run a
+                                        simulation to populate the table</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION: Tournament Bracket -->
+            <section id="bracket-section" class="content-section">
+                <div class="panel glass full-height">
+                    <div class="section-header">
+                        <h3>Round of 16 Matchups</h3>
+                        <p class="subtitle">Simulated knockout stage draws</p>
+                    </div>
+                    <div id="bracket-container" class="bracket-grid">
+                        <!-- Bracket generated here -->
+                        <div class="empty-state">Run simulation to generate bracket</div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="intro.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
