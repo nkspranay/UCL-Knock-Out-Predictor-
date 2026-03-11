@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="200" height="200">
-    <!-- Star Ball Outline -->
-    <path fill="none" stroke="#00f2fe" stroke-width="2" d="M50 5 L60 38 L95 38 L65 58 L75 92 L50 72 L25 92 L35 58 L5 38 L40 38 Z" />
-    <circle cx="50" cy="50" r="40" fill="none" stroke="#00ddec" stroke-width="1" stroke-dasharray="2,2"/>
-    <text x="50" y="55" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">UCL</text>
-    <text x="50" y="70" font-family="Arial, sans-serif" font-size="8" fill="#4facfe" text-anchor="middle">PREDICTOR</text>
-</svg>
