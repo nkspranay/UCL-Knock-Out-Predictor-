@@ -58,9 +58,9 @@ const LEAGUE_LOGOS = {
 };
 
 const UCL_LOGO =
-  "https://upload.wikimedia.org/wikipedia/commons/0/0a/UEFA_Champions_League_logo.svg";
+  "https://upload.wikimedia.org/wikipedia/commons/f/f3/Logo_UEFA_Champions_League.png";
 const UCL_TROPHY =
-  "https://upload.wikimedia.org/wikipedia/en/e/e3/UEFA_Champions_League_trophy.svg";
+  "https://www.pngwing.com/en/free-png-sspim";
 
 function safeImg(e) {
   e.currentTarget.onerror = null;
@@ -243,7 +243,7 @@ function App() {
                     {tableRows.length === 0 ? (
                       <tr>
                         <td colSpan={5} className="placeholder-cell">
-                          Click &quot;Run Monte Carlo Simulation&quot; to load
+                          Click &quot;Run Simulation&quot; to load
                           results.
                         </td>
                       </tr>
@@ -353,7 +353,7 @@ function App() {
           &quot;Football will forever remain our first love&quot;
         </p>
         <p className="footer-credit">
-          nkspr | <a href="mailto:nkspr@example.com">nkspr@example.com</a>
+          N.K.S.PRANAY | <a href="mailto:nkspranay123@gmail.com">nkspranay123@gmail.com</a>
         </p>
       </footer>
     </div>
