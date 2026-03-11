@@ -4,6 +4,32 @@ A Monte Carlo simulation engine that predicts the outcome probabilities of the *
 
 The project simulates the entire tournament thousands of times using a probabilistic match model to estimate each team's chances of reaching every round and winning the competition.
 
+## Live Demo
+
+Frontend:
+https://ucl-knock-out-predictor.vercel.app
+
+Backend API:
+https://ucl-knock-out-predictor.onrender.com/docs
+
+## Screenshots
+
+### Dashboard
+
+![Dashboard](screenshots/homepage.png)
+
+### Simulation Results
+
+![Simulation Results](screenshots/simulation-results.png)
+
+### League Winners
+
+![League Winners](screenshots/league-probabilities.png)
+
+### Team Probabilities
+
+![Team Probabilities](screenshots/team-probabilities.png)
+
 
 
 ## Features
