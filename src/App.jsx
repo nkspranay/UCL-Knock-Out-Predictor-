@@ -59,6 +59,8 @@ const LEAGUE_LOGOS = {
 
 const UCL_LOGO =
   "https://upload.wikimedia.org/wikipedia/commons/0/0a/UEFA_Champions_League_logo.svg";
+const UCL_TROPHY =
+  "https://upload.wikimedia.org/wikipedia/en/e/e3/UEFA_Champions_League_trophy.svg";
 
 function safeImg(e) {
   e.currentTarget.onerror = null;
@@ -283,10 +285,8 @@ function App() {
               ) : (
                 <div className="bars-list">
                   {championRows.map((row) => {
-                    const widthPercent =
-                      maxChampionWin > 0
-                        ? (row.win / maxChampionWin) * 100
-                        : 0;
+                    // Changed to be out of 100% instead of maxChampionWin
+                    const widthPercent = row.win * 100;
                     return (
                       <BarRow
                         key={row.team}
@@ -314,8 +314,8 @@ function App() {
               ) : (
                 <div className="bars-list">
                   {leagueRows.map((row) => {
-                    const widthPercent =
-                      maxLeagueWin > 0 ? (row.win / maxLeagueWin) * 100 : 0;
+                    // Changed to be out of 100% instead of maxLeagueWin
+                    const widthPercent = row.win * 100;
                     return (
                       <BarRow
                         key={row.league}
@@ -347,6 +347,15 @@ function App() {
           )}
         </section>
       </main>
+
+      <footer className="app-footer">
+        <p className="footer-quote">
+          &quot;Football will forever remain our first love&quot;
+        </p>
+        <p className="footer-credit">
+          nkspr | <a href="mailto:nkspr@example.com">nkspr@example.com</a>
+        </p>
+      </footer>
     </div>
   );
 }
@@ -372,8 +381,8 @@ function SimulationView({ simulation }) {
   const finalMatch = Array.isArray(final)
     ? final[0]
     : final && typeof final === "object"
-    ? final
-    : null;
+      ? final
+      : null;
 
   const renderMatch = (match, key) => {
     if (!match) return null;
@@ -407,100 +416,125 @@ function SimulationView({ simulation }) {
     );
   };
 
-  // Grid placement helpers for an 8-row bracket (match slots are rows 2-9; row 1 is headings)
-  const ro16RowStarts = [2, 4, 6, 8];
-  const qfRowStarts = [3, 7];
-  const sfRowStart = 5;
+  // 13 column grid
+  // Match Cols: 1 (L16), 3 (QF), 5 (SF), 7 (FIN), 9 (SF), 11 (QF), 13 (R16)
+  // Conn Cols: 2, 4, 6, 8, 10, 12
 
-  const node = (match, key, col, rowStart, span, side, stage) => (
+  // Rows: 1=head, matches=2 to 9
+  const ro16RowStarts = [2, 4, 6, 8];
+
+  // QF spans 2-4 and 6-8
+  const qfRowStarts = [2, 6];
+  const qfSpan = 3;
+
+  // SF spans 2-8
+  const sfRowStarts = [2];
+  const sfSpan = 7;
+
+  // Final spans 2-8
+  const finalRowStart = 2;
+  const finalSpan = 7;
+
+  // Delays for animation
+  const d_ro16 = "0.1s";
+  const d_c1 = "0.5s";
+  const d_qf = "0.9s";
+  const d_c2 = "1.3s";
+  const d_sf = "1.7s";
+  const d_c3 = "2.1s";
+  const d_fin = "2.5s";
+  const d_champ = "3.1s";
+
+  const node = (match, key, col, rowStart, span, side, stage, delay) => {
+    const isFinal = stage === "final";
+    return (
+      <div
+        key={key}
+        className={`bracket-node ${side} ${stage} fade-in-node`}
+        style={{ gridColumn: col, gridRow: `${rowStart} / span ${span}`, animationDelay: delay }}
+      >
+        {isFinal && (
+          <img className="final-trophy-bg" src={UCL_TROPHY} alt="UCL Trophy" />
+        )}
+        {renderMatch(match, key)}
+      </div>
+    );
+  };
+
+  const conn = (key, col, rowStart, span, type, delay) => (
     <div
       key={key}
-      className={`bracket-node ${side} ${stage}`}
-      style={{ gridColumn: col, gridRow: `${rowStart} / span ${span}` }}
+      className={`connector-bracket ${type} fade-in-node`}
+      style={{
+        gridColumn: col,
+        gridRow: `${rowStart} / span ${span}`,
+        "--span": span,
+        animationDelay: delay
+      }}
+    />
+  );
+
+  const connH = (key, col, rowStart, span, type, delay) => (
+    <div
+      key={key}
+      className={`connector-bracket ${type} fade-in-node`}
+      style={{
+        gridColumn: col,
+        gridRow: `${rowStart} / span ${span}`,
+        animationDelay: delay
+      }}
     >
-      {renderMatch(match, key)}
+      <div className="horizontal-line" />
     </div>
   );
 
-  const connectorV = (key, col, rowStart, rowSpan) => (
-    <div
-      key={key}
-      className="connector-v"
-      style={{ gridColumn: col, gridRow: `${rowStart} / span ${rowSpan}` }}
-    />
-  );
-
-  const connectorH = (key, colStart, colEnd, row) => (
-    <div
-      key={key}
-      className="connector-h"
-      style={{ gridColumn: `${colStart} / ${colEnd}`, gridRow: row }}
-    />
-  );
-
   return (
-    <div className="bracket-grid bracket-grid-connected">
-      <div className="bracket-head ro16-left">RO16</div>
-      <div className="bracket-head qf-left">QF</div>
-      <div className="bracket-head sf-left">SF</div>
-      <div className="bracket-head final-head">Final</div>
-      <div className="bracket-head sf-right">SF</div>
-      <div className="bracket-head qf-right">QF</div>
-      <div className="bracket-head ro16-right">RO16</div>
+    <div className="bracket-grid">
+      <div className="bracket-head" style={{ gridColumn: 1 }}>RO16</div>
+      <div className="bracket-head" style={{ gridColumn: 3 }}>QF</div>
+      <div className="bracket-head" style={{ gridColumn: 5 }}>SF</div>
+      <div className="bracket-head" style={{ gridColumn: 7 }}>Final</div>
+      <div className="bracket-head" style={{ gridColumn: 9 }}>SF</div>
+      <div className="bracket-head" style={{ gridColumn: 11 }}>QF</div>
+      <div className="bracket-head" style={{ gridColumn: 13 }}>RO16</div>
 
-      {/* LEFT SIDE */}
-      {leftRo16.map((m, idx) =>
-        node(m, `l16-${idx}`, 1, ro16RowStarts[idx], 2, "left", "ro16")
-      )}
-      {leftQF.map((m, idx) =>
-        node(m, `lqf-${idx}`, 2, qfRowStarts[idx], 4, "left", "qf")
-      )}
-      {leftSF.map((m, idx) =>
-        node(m, `lsf-${idx}`, 3, sfRowStart, 8, "left", "sf")
-      )}
+      {/* MATCHES - LEFT */}
+      {leftRo16.map((m, idx) => node(m, `l16-${idx}`, 1, ro16RowStarts[idx], 1, "left", "ro16", d_ro16))}
+      {leftQF.map((m, idx) => node(m, `lqf-${idx}`, 3, qfRowStarts[idx], qfSpan, "left", "qf", d_qf))}
+      {leftSF.map((m, idx) => node(m, `lsf-${idx}`, 5, sfRowStarts[idx], sfSpan, "left", "sf", d_sf))}
 
-      {/* RIGHT SIDE */}
-      {rightSF.map((m, idx) =>
-        node(m, `rsf-${idx}`, 5, sfRowStart, 8, "right", "sf")
-      )}
-      {rightQF.map((m, idx) =>
-        node(m, `rqf-${idx}`, 6, qfRowStarts[idx], 4, "right", "qf")
-      )}
-      {rightRo16.map((m, idx) =>
-        node(m, `r16-${idx}`, 7, ro16RowStarts[idx], 2, "right", "ro16")
-      )}
+      {/* MATCHES - RIGHT */}
+      {rightSF.map((m, idx) => node(m, `rsf-${idx}`, 9, sfRowStarts[idx], sfSpan, "right", "sf", d_sf))}
+      {rightQF.map((m, idx) => node(m, `rqf-${idx}`, 11, qfRowStarts[idx], qfSpan, "right", "qf", d_qf))}
+      {rightRo16.map((m, idx) => node(m, `r16-${idx}`, 13, ro16RowStarts[idx], 1, "right", "ro16", d_ro16))}
 
       {/* FINAL */}
-      {finalMatch && node(finalMatch, "final", 4, 6, 2, "center", "final")}
+      {finalMatch && node(finalMatch, "final", 7, finalRowStart, finalSpan, "center", "final", d_fin)}
 
-      {/* CONNECTORS: RO16 -> QF (left) */}
-      {connectorV("lv0", 1, 2, 4)}
-      {connectorH("lh0", 1, 2, 4)}
-      {connectorV("lv1", 1, 6, 4)}
-      {connectorH("lh1", 1, 2, 8)}
+      {/* CONNECTORS - LEFT */}
+      {/* RO16 to QF: span from center of RO16(1) to RO16(2) -> spans 3 rows */}
+      {conn("lc1-0", 2, ro16RowStarts[0], 3, "right", d_c1)}
+      {conn("lc1-1", 2, ro16RowStarts[2], 3, "right", d_c1)}
 
-      {/* CONNECTORS: QF -> SF (left) */}
-      {connectorV("lqv", 2, 3, 8)}
-      {connectorH("lqh", 2, 3, 5)}
+      {/* QF to SF: span from center of QF(1) to QF(2) -> rows 2 to 8 -> spans 7 rows */}
+      {conn("lc2-0", 4, 3, 5, "right", d_c2)}
 
-      {/* CONNECTORS: SF -> Final (left) */}
-      {connectorH("lsfh", 3, 4, 6)}
+      {/* SF to Final: horizontal only, since it's 1 match to 1 match */}
+      {connH("lc3", 6, 2, 7, "horizontal-only", d_c3)}
 
-      {/* CONNECTORS: SF -> Final (right) */}
-      {connectorH("rsfh", 4, 5, 6)}
+      {/* CONNECTORS - RIGHT */}
+      {/* RO16 to QF */}
+      {conn("rc1-0", 12, ro16RowStarts[0], 3, "left", d_c1)}
+      {conn("rc1-1", 12, ro16RowStarts[2], 3, "left", d_c1)}
 
-      {/* CONNECTORS: QF -> SF (right) */}
-      {connectorV("rqv", 6, 3, 8)}
-      {connectorH("rqh", 5, 6, 5)}
+      {/* QF to SF */}
+      {conn("rc2-0", 10, 3, 5, "left", d_c2)}
 
-      {/* CONNECTORS: RO16 -> QF (right) */}
-      {connectorV("rv0", 7, 2, 4)}
-      {connectorH("rh0", 6, 7, 4)}
-      {connectorV("rv1", 7, 6, 4)}
-      {connectorH("rh1", 6, 7, 8)}
+      {/* SF to Final */}
+      {connH("rc3", 8, 2, 7, "horizontal-only", d_c3)}
 
       {champion && (
-        <div className="bracket-champion">
+        <div className="bracket-champion fade-in-node" style={{ animationDelay: d_champ }}>
           <span className="champion-pill">
             <img
               src={getLogoUrl(champion)}
