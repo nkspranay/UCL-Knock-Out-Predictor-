@@ -3,6 +3,8 @@ import "./App.css";
 
 const API_URL = "https://ucl-knock-out-predictor.onrender.com/simulate";
 
+
+
 const CLUB_LOGOS = {
   Arsenal:
     "https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg",
@@ -102,6 +104,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [page, setPage] = useState("rounds");
+  const [animationKey, setAnimationKey] = useState(0);
 
   async function handleRunSimulation() {
     setLoading(true);
@@ -116,10 +119,12 @@ function App() {
       setTeamResults(data.team_results || null);
       setLeagueResults(data.league_results || null);
       setSimulation(data.simulation || null);
+      setAnimationKey(prev => prev + 1);
+
     } catch (err) {
       console.error(err);
       setError(
-        "Failed to run simulation. Make sure the FastAPI backend is running on http://127.0.0.1:8000."
+        "Failed to run simulation. Make sure the FastAPI backend is running."
       );
     } finally {
       setLoading(false);
@@ -336,7 +341,7 @@ function App() {
             <div className="section">
               <h2 className="section-title">Example Tournament Simulation</h2>
               {simulation ? (
-                <SimulationView simulation={simulation} />
+                <SimulationView simulation={simulation} key={animationKey} />
               ) : (
                 <p className="placeholder-text">
                   When the backend returns a sample tournament under{" "}
